@@ -30,10 +30,10 @@ jobs:
         run: |
           ssh root@62.72.1.215 "cd /var/www/laravel && composer install --no-dev --prefer-dist --no-interaction || { echo 'Composer install failed'; exit 1; }"
 
-      - name: Install Node.js and npm
+      - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'
+          node-version: '16' 
 
       - name: Install npm dependencies
         run: |

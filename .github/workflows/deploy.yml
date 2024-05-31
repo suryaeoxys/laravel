@@ -12,16 +12,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-        - name: Install Node.js and NPM
+      - name: Install Node.js and NPM
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+      
+      - name: Install dependencies
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction
+          npm install
+          npm run prod
 
-        - name: Install dependencies
-          run: |
-            composer install --no-dev --prefer-dist --no-interaction
-            npm install
-            npm run prod 
+      - name: Build
+        run: |
+          php artisan key:generate
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          php artisan event:cache
+          php artisan storage:link
+          php artisan optimize
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +57,7 @@ jobs:
         run: |
           ssh root@62.72.1.215 << 'EOF'
           cd /var/www/laravel
-          composer install --no-dev --prefer-dist --no-interaction  
+          composer install --no-dev --prefer-dist --no-interaction
           php artisan migrate --force
           php artisan config:cache
           php artisan route:cache

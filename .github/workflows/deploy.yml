@@ -23,12 +23,14 @@ jobs:
 
       - name: Copy files to VPS
         run: |
-          ssh root@62.72.1.215 "mkdir -p /var/www/laravel"
+          ssh root@62.72.1.215 
+          mkdir -p /var/www/laravel
           scp -r * root@62.72.1.215:/var/www/laravel
 
       - name: Install Composer dependencies
         run: |
-          ssh root@62.72.1.215 
+          ssh root@62.72.1.215
+          mkdir -p /var/www/laravel 
           cd /var/www/laravel
           composer install --no-dev --prefer-dist --no-interaction
 
